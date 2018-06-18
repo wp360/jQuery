@@ -29,6 +29,7 @@ h1 {
 
 input,
 .task-item,
+.task-detail,
 .task-detail-mask,
 textarea,
 button {
@@ -68,16 +69,23 @@ button {
   margin-right: 1%;
 }
 
-.add-task [type=submit] {
-  width: 15%;
+[type=submit] {
   background: #46b1e4;
 }
 
-.add-task [type=submit]:hover {
+.add-task [type=submit] {
+  width: 15%;
+}
+
+.task-detail [type=submit] {
+  width: 20%;
+  float: right;
+}
+
+.add-task [type=submit]:hover,.task-detail [type=submit]:hover {
   background: #5fb9e4;
   -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, .4);
   -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, .4);
-  ;
   box-shadow: 0 2px 3px rgba(0, 0, 0, .4);
 }
 
@@ -108,10 +116,15 @@ button {
   color: #333;
   width: 50%;
   height: 100%;
+  min-height: 280px;
   padding: 10px;
-  bottom: 0;
+  top: 0;
   right: 0;
   display: none;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 1px 2px 1px rgba(0, 0, 0, .1);
+  -moz-box-shadow: 0 1px 2px 1px rgba(0, 0, 0, .1);
+  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, .1);
 }
 
 .task-detail .content {
@@ -120,11 +133,12 @@ button {
   cursor: pointer;
 }
 
-.task-detail>* {
+.task-detail .input-item {
   margin-bottom: 10px;
 }
 
 .task-detail-mask {
+  position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
@@ -145,4 +159,8 @@ button {
 
 .action:hover {
   color: #333;
+}
+
+input.hide{
+  display: none;
 }
