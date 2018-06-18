@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jquery 任务清单</title>
+    <!-- <link rel="stylesheet" type="text/css" href="css/reset.css"> -->
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+</head>
+<body>
+    <!-- <h1>Hello World!</h1> -->
+    <div class="container">
+        <h1>任务清单</h1>
+        <form class="add-task">
+            <input type="text" name="content" autofocus autocomplete="off" placeholder="e.g. 下午记得学习Vue">
+            <button type="submit" class="btn">提交</button>
+        </form>
+        <div class="task-list">
+            <!-- <div class="task-item">
+                <span><input type="checkbox" name="" id=""></span>
+                <span class="task-content">项目内容1</span>
+                <span>删除</span>
+                <span>详情</span>
+            </div> -->
+        </div>
+        <div class="task-detail-mask"></div>
+        <div class="task-detail">
+            <!-- 任务详情 -->
+            <div class="content">
+                <!-- 任务标题 -->
+                下午记得买菜
+            </div>
+            <!-- 任务标题结束 -->
+            <div>
+                <div class="desc">
+                    <!-- 任务描述开始-->
+                    <textarea name="" id=""></textarea>
+                </div>
+                <!-- 任务描述结束 -->
+            </div>
+            <div class="remind">
+                <!-- 任务定时提醒开始 -->
+                <input type="date">
+                <!--<button type="submit">submit</button>-->
+            </div>
+            <!-- 任务定时提醒结束 -->
+        </div>
+        </div>
+        <!-- 任务详情结束 -->
+    </div>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/store/dist/store.legacy.min.js"></script>
+    <script src="js/base.js"></script>
+</body>
+</html>
