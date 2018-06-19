@@ -14,6 +14,7 @@
     var $update_form;
     var $task_detail_content;
     var $task_detail_content_input;
+    var $checkbox_complete;
 
     init();
 
@@ -62,7 +63,7 @@
         // 任务模板
         var list_item_tpl =
             '<div class="task-item" data-index="' + index + '">' +
-            '<span><input type="checkbox" name="" id=""></span>' +
+            '<span><input type="checkbox"' + (data.complete ? 'checked' : '') + ' class="complete"></span>' +
             '<span class="task-content">' + data.content + '</span>' +
             '<span class="fr">' +
             '<span class="action delete">删除</span>' +
@@ -78,15 +79,33 @@
         var $task_list = $('.task-list');
         // 清空
         $task_list.html('');
+        // 完成的任务
+        var complete_items = [];
+        var $task;
         for(var i=0;i<task_list.length;i++){
-            var $task = render_task_item(task_list[i],i);
-            // $task_list.prepend($task);
-            $task_list.append($task);
+            var item = task_list[i];
+            if (item && item.complete){
+                // complete_items.push(item);
+                complete_items[i] = item;
+            } else{
+                $task = render_task_item(item, i);
+                // $task_list.prepend($task);
+                $task_list.append($task);
+            }
+
+            for (var j = 0; j < complete_items.length; j++) {
+                $task = render_task_item(complete_items[j], j);
+                if(!$task) continue;
+                $task.addClass('completed');
+                $task_list.append($task);
+            }
         }
         $task_delete = $('.action.delete');
         $task_detail_trigger = $('.action.detail');
+        $checkbox_complete = $('.task-list .complete');
         listen_task_detele();
         listen_task_detail();
+        listen_checkbox_complete();
     }
 
     // 删除任务
@@ -105,21 +124,31 @@
             // 找到删除按钮所在的task元素
             var $item = $this.parent().parent();
             var index = $item.data('index');
-            task_delete(index);
+            // task_delete(index);
             // 确认删除
             var tmp = confirm('确定删除？');
-            tmp ? task_delete(index) : null;
+            // tmp ? task_delete(index) : null;
+            if(tmp === true){
+                task_delete(index);
+            }else{
+                return;
+            }
             // console.log('index', $item.data('index'));
         });
     }
 
     // 任务详情
     function listen_task_detail(){
+        var index;
+        $('.task-item').on('dblclick',function(){
+            index = $(this).data('index');
+            show_task_detail(index);
+        });
         $task_detail_trigger.on('click', function () {
             var $this = $(this);
             // 找到详情按钮所在的task元素
             var $item = $this.parent().parent();
-            var index = $item.data('index');
+            index = $item.data('index');
             // console.log('index',index);
             show_task_detail(index);
         });
@@ -183,12 +212,35 @@
         });
     }
 
+    // 监听checkbox是否选中
+    function listen_checkbox_complete() {
+        $checkbox_complete.on('click', function () {
+            var $this = $(this);
+            // var is_complete = $this.is(':checked');
+            var index = $this.parent().parent().data('index');
+            var item = get(index);
+            // console.log(item);
+            // update_task(index, { complete: is_complete });
+            if(item.complete){
+                update_task(index, { complete: false });
+            }else{
+                update_task(index, { complete: true });
+            }
+        });
+    }
+
+    // 获取数据
+    function get(index){
+        return store.get('task_list')[index];
+    }
+
     // 更新任务
     function update_task(index,data){
         // !index || !task_list[index]
         if(!task_list[index]) return;
-        task_list[index] = data;
-        // task_list[index] = $.merge({},task_list[index],data);
+        // task_list[index] = data;
+        // complete: true | false 直接作为对象替换data，所以改用extend
+        task_list[index] = $.extend({},task_list[index],data);
         // console.log(store.get('task_list'));
         refresh_task_list();
     }
