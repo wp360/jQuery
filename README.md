@@ -37,5 +37,8 @@
 <!-- 任务定时提醒结束 -->
 ```
 
+##日历插件
+`npm install jquery-datetimepicker --save`
+
 ## 备注
 [参考代码：https://github.com/auven/jqTodo](https://github.com/auven/jqTodo)

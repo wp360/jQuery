@@ -15,11 +15,22 @@
     var $task_detail_content;
     var $task_detail_content_input;
     var $checkbox_complete;
+    var $msg = $('.msg');
+    var $msg_content = $msg.find('.msg-content');
+    var $msg_confirm = $msg.find('.confirmed');
+    var $alerter = $('.alerter');
 
     init();
 
     $form_add_task.on('submit', on_add_task_form_submit);
     $task_detail_mask.on('click', hide_task_detail);
+
+    // 监听提醒事件
+    function listen_msg_event(){
+        $msg_confirm.on('click',function(){
+            hide_msg();
+        });
+    }
 
     // 提交按钮事件
     function on_add_task_form_submit(e){
@@ -84,6 +95,7 @@
         var $task;
         for(var i=0;i<task_list.length;i++){
             var item = task_list[i];
+            $task = render_task_item(item, i);
             if (item && item.complete){
                 // complete_items.push(item);
                 complete_items[i] = item;
@@ -92,14 +104,15 @@
                 // $task_list.prepend($task);
                 $task_list.append($task);
             }
-
-            for (var j = 0; j < complete_items.length; j++) {
-                $task = render_task_item(complete_items[j], j);
-                if(!$task) continue;
-                $task.addClass('completed');
-                $task_list.append($task);
-            }
         }
+
+        for (var j = 0; j < complete_items.length; j++) {
+            $task = render_task_item(complete_items[j], j);
+            if (!$task) continue;
+            $task.addClass('completed');
+            $task_list.append($task);
+        }
+
         $task_delete = $('.action.delete');
         $task_detail_trigger = $('.action.detail');
         $checkbox_complete = $('.task-list .complete');
@@ -183,12 +196,15 @@
             '</div>' +
             '</div>' +
             '<div class="remind input-item"">' +
-            '<input name="remind_date" type="date" value="' + item.remind_date + '">' +
+            '<label>提醒时间</label>' +
+            '<input class="datetime" name="remind_date" type="text" value="' + (item.remind_date || '') + '">' +
             '</div>' +
             '<div class="input-item"><button type="submit">更新</button></div>' +
             '</form>';
         $task_detail.html(null);
         $task_detail.html(tpl);
+        // 提醒时间
+        $('.datetime').datetimepicker();
         $update_form = $task_detail.find('form');
         // console.log($update_form);
         $task_detail_content = $update_form.find('.content');
@@ -245,11 +261,49 @@
         refresh_task_list();
     }
 
+    // 提醒任务
+    function task_remind_check(){
+        // $msg.show('1');
+        // 当前时间
+        var current_timestamp;
+        var itl = setInterval(function(){
+            for (var i = 0; i < task_list.length; i++) {
+                var item = get(i);
+                // 任务时间
+                var task_timestamp;
+                if (!item || !item.remind_date || item.informed)
+                    continue;
+
+                current_timestamp = (new Date()).getTime();
+                task_timestamp = (new Date(item.remind_date)).getTime();
+                // console.log('当前时间', current_timestamp);
+                // console.log('任务时间', task_timestamp);
+                if (current_timestamp - task_timestamp >= 1) {
+                    update_task(i,{informed: true});
+                    show_msg(item.content);
+                }
+            }
+        },300);
+    }
+
+    function show_msg(msg){
+        if(!msg) return;
+        $msg_content.html(msg);
+        $alerter.get(0).play();
+        $msg.show();
+    }
+
+    function hide_msg() {
+        $msg.hide();
+    }
+
     // 初始化
     function init(){
         task_list = store.get('task_list') || [];
+        listen_msg_event();
         if(task_list.length) {
             render_task_list();
+            task_remind_check();
         }
     }
 })();

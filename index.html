@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Jquery 任务清单</title>
+    <!-- normalize.css -->
     <!-- <link rel="stylesheet" type="text/css" href="css/reset.css"> -->
+    <link rel="stylesheet" type="text/css" href="node_modules/jquery-datetimepicker/build/jquery.datetimepicker.min.css">
     <link rel="stylesheet" type="text/css" href="css/base.css">
 </head>
 <body>
     <!-- <h1>Hello World!</h1> -->
+    <div class="msg">
+        <span class="msg-content"></span>
+        <span class="anchor confirmed">知道了</span>
+    </div>
     <div class="container">
         <h1>任务清单</h1>
         <form class="add-task">
@@ -30,8 +36,10 @@
         </div>
         <!-- 任务详情结束 -->
     </div>
+    <video src="alert.mp3" class="alerter"></video>
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="node_modules/store/dist/store.legacy.min.js"></script>
+    <script src="node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
     <script src="js/base.js"></script>
 </body>
 </html>

@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "jquery": "^3.2.1",
+    "jquery-datetimepicker": "^2.5.20",
     "store": "^2.0.12"
   }
 }
